@@ -6,264 +6,295 @@
   <title>Seră Automată</title>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0f1a14; color: #e8f5e9; min-height: 100vh; }
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #0f1a14;
-      color: #1a9c25;
+    /* ── LOGIN ── */
+    #login-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       min-height: 100vh;
     }
 
+    .login-card {
+      background: #1a2e1e;
+      border: 0.5px solid #2d5a34;
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .login-logo {
+      text-align: center;
+      font-size: 40px;
+      margin-bottom: 8px;
+    }
+
+    .login-titlu {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .login-subtitlu {
+      text-align: center;
+      font-size: 13px;
+      color: #81c784;
+      margin-bottom: 32px;
+    }
+
+    .form-group { margin-bottom: 16px; }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      color: #81c784;
+      margin-bottom: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      background: #0f1a14;
+      border: 1px solid #2d5a34;
+      border-radius: 8px;
+      color: #e8f5e9;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus { border-color: #4caf50; }
+
+    .btn-login {
+      width: 100%;
+      padding: 13px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn-login:hover { background: #388e3c; }
+
+    .login-eroare {
+      color: #ef9a9a;
+      font-size: 12px;
+      text-align: center;
+      margin-top: 12px;
+      min-height: 18px;
+    }
+
+    /* ── DASHBOARD ── */
+    #dashboard-page { display: none; }
+
     header {
-      background: #ffffff;
-      padding: 16px 24px;
+      background: #1b5e20;
+      padding: 14px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
     }
 
-    header h1 { font-size: 20px; font-weight: 600; }
+    header h1 { font-size: 18px; font-weight: 600; }
 
-    #status-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: #964c4c;
-      display: inline-block;
-      margin-right: 6px;
-    }
+    .header-dreapta { display: flex; align-items: center; gap: 16px; }
 
+    #status-dot { width: 10px; height: 10px; border-radius: 50%; background: #f44336; display: inline-block; margin-right: 6px; }
     #status-text { font-size: 13px; color: #a5d6a7; }
+
+    #user-email { font-size: 12px; color: #a5d6a7; }
+
+    .btn-logout {
+      background: transparent;
+      border: 1px solid #4caf50;
+      color: #4caf50;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { background: #4caf50; color: #0f1a14; }
 
     .container { padding: 24px; max-width: 1100px; margin: 0 auto; }
 
     .sectiune-titlu {
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      color: #66bb6a;
-      margin-bottom: 10px;
-      margin-top: 28px;
-      text-transform: uppercase;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
+      color: #66bb6a; margin-bottom: 10px; margin-top: 28px; text-transform: uppercase;
     }
 
-    .carduri {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 14px;
-    }
+    .carduri { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
 
     .card {
-      background: #1a2e1e;
-      border: 0.5px solid #2d5a34;
-      border-radius: 12px;
-      padding: 18px;
+      background: #1a2e1e; border: 0.5px solid #2d5a34;
+      border-radius: 12px; padding: 18px;
     }
 
     .card-icon { font-size: 24px; margin-bottom: 8px; }
     .card-valoare { font-size: 28px; font-weight: 600; color: #a5d6a7; }
     .card-label { font-size: 12px; color: #81c784; margin-top: 4px; }
 
-    .bara-container { margin-top: 8px; }
+    .bara { height: 8px; background: #2d5a34; border-radius: 4px; overflow: hidden; margin-top: 6px; }
+    .bara-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
 
-    .bara {
-      height: 8px;
-      background: #2d5a34;
-      border-radius: 4px;
-      overflow: hidden;
-      margin-top: 6px;
-    }
-
-    .bara-fill {
-      height: 100%;
-      border-radius: 4px;
-      transition: width 0.5s ease;
-    }
-
-    .pompe-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-    }
+    .pompe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
 
     .pompa-card {
-      background: #1a2e1e;
-      border: 0.5px solid #2d5a34;
-      border-radius: 12px;
-      padding: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background: #1a2e1e; border: 0.5px solid #2d5a34;
+      border-radius: 12px; padding: 18px;
+      display: flex; align-items: center; justify-content: space-between;
     }
 
     .pompa-info h3 { font-size: 15px; font-weight: 500; }
     .pompa-info p { font-size: 12px; color: #81c784; margin-top: 2px; }
 
     .btn-pompa {
-      background: #2e7d32;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: background 0.2s;
+      background: #2e7d32; color: white; border: none;
+      border-radius: 8px; padding: 10px 18px; font-size: 13px;
+      cursor: pointer; transition: background 0.2s;
     }
-
     .btn-pompa:hover { background: #388e3c; }
-    .btn-pompa:active { background: #1b5e20; }
     .btn-pompa.activ { background: #f44336; }
 
     .grafic-card {
-      background: #1a2e1e;
-      border: 0.5px solid #2d5a34;
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 14px;
+      background: #1a2e1e; border: 0.5px solid #2d5a34;
+      border-radius: 12px; padding: 20px; margin-top: 14px;
     }
-
-    .grafic-card h3 {
-      font-size: 14px;
-      color: #81c784;
-      margin-bottom: 16px;
-    }
-
-    .ultima-actualizare {
-      font-size: 11px;
-      color: #4caf50;
-      text-align: right;
-      margin-top: 20px;
-    }
+    .grafic-card h3 { font-size: 14px; color: #81c784; margin-bottom: 16px; }
 
     .setari-card {
-      background: #1a2e1e;
-      border: 0.5px solid #2d5a34;
-      border-radius: 12px;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
+      background: #1a2e1e; border: 0.5px solid #2d5a34;
+      border-radius: 12px; padding: 20px;
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
     }
-
     .setari-card label { font-size: 13px; color: #81c784; }
+    .setari-card input[type=range] { width: 160px; accent-color: #4caf50; }
+    .setari-card span { font-size: 14px; font-weight: 500; color: #a5d6a7; min-width: 40px; }
 
-    .setari-card input[type=range] {
-      width: 160px;
-      accent-color: #4caf50;
-    }
-
-    .setari-card span {
-      font-size: 14px;
-      font-weight: 500;
-      color: #a5d6a7;
-      min-width: 40px;
-    }
+    .ultima-actualizare { font-size: 11px; color: #4caf50; text-align: right; margin-top: 20px; }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>🌿 Seră Automată</h1>
-  <div>
-    <span id="status-dot"></span>
-    <span id="status-text">Se conectează...</span>
-  </div>
-</header>
+<!-- ── PAGINA LOGIN ── -->
+<div id="login-page">
+  <div class="login-card">
+    <div class="login-logo">🌿</div>
+    <div class="login-titlu">Seră Automată</div>
+    <div class="login-subtitlu">Autentifică-te pentru a continua</div>
 
-<div class="container">
-
-  <!-- SENZORI AMBIENT -->
-  <div class="sectiune-titlu">Senzori ambient</div>
-  <div class="carduri">
-    <div class="card">
-      <div class="card-icon">🌡️</div>
-      <div class="card-valoare" id="temperatura">--</div>
-      <div class="card-label">Temperatură (°C)</div>
+    <div class="form-group">
+      <label>EMAIL</label>
+      <input type="email" id="input-email" placeholder="email@exemplu.com">
     </div>
-    <div class="card">
-      <div class="card-icon">💧</div>
-      <div class="card-valoare" id="umiditate-aer">--</div>
-      <div class="card-label">Umiditate aer (%)</div>
+    <div class="form-group">
+      <label>PAROLĂ</label>
+      <input type="password" id="input-parola" placeholder="••••••••"
+        onkeydown="if(event.key==='Enter') login()">
     </div>
-  </div>
 
-  <!-- UMIDITATE SOL -->
-  <div class="sectiune-titlu">Umiditate sol per ghiveci</div>
-  <div class="carduri">
-    <div class="card">
-      <div class="card-icon">🪴</div>
-      <div class="card-valoare" id="sol1-val">--</div>
-      <div class="card-label">Ghiveci 1 (%)</div>
-      <div class="bara-container">
-        <div class="bara">
-          <div class="bara-fill" id="sol1-bara" style="width:0%; background:#4caf50"></div>
+    <button class="btn-login" onclick="login()">Intră în sistem</button>
+    <div class="login-eroare" id="login-eroare"></div>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div id="dashboard-page">
+  <header>
+    <h1>🌿 Seră Automată</h1>
+    <div class="header-dreapta">
+      <div>
+        <span id="status-dot"></span>
+        <span id="status-text">Se conectează...</span>
+      </div>
+      <span id="user-email"></span>
+      <button class="btn-logout" onclick="logout()">Deconectare</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="sectiune-titlu">Senzori ambient</div>
+    <div class="carduri">
+      <div class="card">
+        <div class="card-icon">🌡️</div>
+        <div class="card-valoare" id="temperatura">--</div>
+        <div class="card-label">Temperatură (°C)</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">💧</div>
+        <div class="card-valoare" id="umiditate-aer">--</div>
+        <div class="card-label">Umiditate aer (%)</div>
+      </div>
+    </div>
+
+    <div class="sectiune-titlu">Umiditate sol per ghiveci</div>
+    <div class="carduri">
+      <div class="card">
+        <div class="card-icon">🪴</div>
+        <div class="card-valoare" id="sol1-val">--</div>
+        <div class="card-label">Ghiveci 1 (%)</div>
+        <div class="bara"><div class="bara-fill" id="sol1-bara" style="width:0%;background:#4caf50"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🪴</div>
+        <div class="card-valoare" id="sol2-val">--</div>
+        <div class="card-label">Ghiveci 2 (%)</div>
+        <div class="bara"><div class="bara-fill" id="sol2-bara" style="width:0%;background:#4caf50"></div></div>
+      </div>
+    </div>
+
+    <div class="sectiune-titlu">Control pompe</div>
+    <div class="pompe-grid">
+      <div class="pompa-card">
+        <div class="pompa-info">
+          <h3>Pompa 1</h3>
+          <p id="pompa1-status">Inactivă</p>
         </div>
+        <button class="btn-pompa" id="btn-pompa1" onclick="pornestePompa(1)">💧 Udă</button>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-icon">🪴</div>
-      <div class="card-valoare" id="sol2-val">--</div>
-      <div class="card-label">Ghiveci 2 (%)</div>
-      <div class="bara-container">
-        <div class="bara">
-          <div class="bara-fill" id="sol2-bara" style="width:0%; background:#4caf50"></div>
+      <div class="pompa-card">
+        <div class="pompa-info">
+          <h3>Pompa 2</h3>
+          <p id="pompa2-status">Inactivă</p>
         </div>
+        <button class="btn-pompa" id="btn-pompa2" onclick="pornestePompa(2)">💧 Udă</button>
       </div>
     </div>
-  </div>
 
-  <!-- CONTROL POMPE -->
-  <div class="sectiune-titlu">Control pompe</div>
-  <div class="pompe-grid">
-    <div class="pompa-card">
-      <div class="pompa-info">
-        <h3>Pompa 1</h3>
-        <p id="pompa1-status">Inactiva</p>
-      </div>
-      <button class="btn-pompa" id="btn-pompa1" onclick="pornestePompa(1)">
-        💧 Udă
-      </button>
+    <div class="sectiune-titlu">Setări prag udare</div>
+    <div class="setari-card">
+      <label>Prag minim umiditate sol:</label>
+      <input type="range" id="prag-slider" min="10" max="60" value="30"
+        oninput="document.getElementById('prag-val').textContent=this.value+'%'">
+      <span id="prag-val">30%</span>
+      <button class="btn-pompa" onclick="salveazaPrag()">Salvează</button>
     </div>
-    <div class="pompa-card">
-      <div class="pompa-info">
-        <h3>Pompa 2</h3>
-        <p id="pompa2-status">Inactiva</p>
-      </div>
-      <button class="btn-pompa" id="btn-pompa2" onclick="pornestePompa(2)">
-        💧 Udă
-      </button>
+
+    <div class="sectiune-titlu">Istoric umiditate sol</div>
+    <div class="grafic-card">
+      <h3>Ultimele 20 de citiri</h3>
+      <canvas id="grafic" height="100"></canvas>
     </div>
-  </div>
 
-  <!-- SETARI PRAG -->
-  <div class="sectiune-titlu">Setări prag udare</div>
-  <div class="setari-card">
-    <label>Prag minim umiditate sol:</label>
-    <input type="range" id="prag-slider" min="10" max="60" value="30"
-      oninput="document.getElementById('prag-val').textContent=this.value+'%'">
-    <span id="prag-val">30%</span>
-    <button class="btn-pompa" onclick="salveazaPrag()">Salvează</button>
+    <div class="ultima-actualizare" id="ultima-actualizare">Ultima actualizare: --</div>
   </div>
-
-  <!-- GRAFIC ISTORIC -->
-  <div class="sectiune-titlu">Istoric umiditate sol</div>
-  <div class="grafic-card">
-    <h3>Ultimele 20 de citiri</h3>
-    <canvas id="grafic" height="100"></canvas>
-  </div>
-
-  <div class="ultima-actualizare" id="ultima-actualizare">
-    Ultima actualizare: --
-  </div>
-
 </div>
 
 <script>
-  // ── Firebase config ──
   const firebaseConfig = {
     apiKey: "AIzaSyBE_tgn4KrirvwxiOO4mn6O3NbAtwPscJk",
     authDomain: "sera-automata-3965b.firebaseapp.com",
@@ -276,118 +307,124 @@
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
+  const auth = firebase.auth();
 
-  // ── Grafic ──
+  // ── GRAFIC ──
   const ctx = document.getElementById('grafic').getContext('2d');
   const grafic = new Chart(ctx, {
     type: 'line',
     data: {
       labels: [],
       datasets: [
-        {
-          label: 'Ghiveci 1 (%)',
-          data: [],
-          borderColor: '#4caf50',
-          backgroundColor: 'rgba(76,175,80,0.1)',
-          tension: 0.4,
-          fill: true
-        },
-        {
-          label: 'Ghiveci 2 (%)',
-          data: [],
-          borderColor: '#81c784',
-          backgroundColor: 'rgba(129,199,132,0.1)',
-          tension: 0.4,
-          fill: true
-        }
+        { label: 'Ghiveci 1 (%)', data: [], borderColor: '#4caf50', backgroundColor: 'rgba(76,175,80,0.1)', tension: 0.4, fill: true },
+        { label: 'Ghiveci 2 (%)', data: [], borderColor: '#81c784', backgroundColor: 'rgba(129,199,132,0.1)', tension: 0.4, fill: true }
       ]
     },
     options: {
       responsive: true,
       scales: {
-        y: {
-          min: 0, max: 100,
-          ticks: { color: '#81c784' },
-          grid: { color: '#2d5a34' }
-        },
-        x: {
-          ticks: { color: '#81c784', maxTicksLimit: 8 },
-          grid: { color: '#2d5a34' }
-        }
+        y: { min: 0, max: 100, ticks: { color: '#81c784' }, grid: { color: '#2d5a34' } },
+        x: { ticks: { color: '#81c784', maxTicksLimit: 8 }, grid: { color: '#2d5a34' } }
       },
-      plugins: {
-        legend: { labels: { color: '#a5d6a7' } }
-      }
+      plugins: { legend: { labels: { color: '#a5d6a7' } } }
     }
   });
 
-  // ── Culoare bara umiditate ──
+  // ── AUTENTIFICARE ──
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      document.getElementById('login-page').style.display = 'none';
+      document.getElementById('dashboard-page').style.display = 'block';
+      document.getElementById('user-email').textContent = user.email;
+      initDashboard();
+    } else {
+      document.getElementById('login-page').style.display = 'flex';
+      document.getElementById('dashboard-page').style.display = 'none';
+    }
+  });
+
+  function login() {
+    const email = document.getElementById('input-email').value;
+    const parola = document.getElementById('input-parola').value;
+    const eroare = document.getElementById('login-eroare');
+    eroare.textContent = '';
+
+    auth.signInWithEmailAndPassword(email, parola)
+      .catch(err => {
+        if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
+          eroare.textContent = 'Email sau parolă incorecte.';
+        } else if (err.code === 'auth/invalid-email') {
+          eroare.textContent = 'Adresa de email nu este validă.';
+        } else {
+          eroare.textContent = 'Eroare la autentificare. Încearcă din nou.';
+        }
+      });
+  }
+
+  function logout() {
+    auth.signOut();
+  }
+
+  // ── DASHBOARD ──
   function culoareUmiditate(val) {
     if (val < 20) return '#f44336';
     if (val < 40) return '#ff9800';
     return '#4caf50';
   }
 
-  // ── Date live ──
-  db.ref('/live').on('value', snap => {
-    const d = snap.val();
-    if (!d) return;
+  function initDashboard() {
+    db.ref('/live').on('value', snap => {
+      const d = snap.val();
+      if (!d) return;
 
-    document.getElementById('status-dot').style.background = '#4caf50';
-    document.getElementById('status-text').textContent = 'Conectat';
+      document.getElementById('status-dot').style.background = '#4caf50';
+      document.getElementById('status-text').textContent = 'Conectat';
+      document.getElementById('temperatura').textContent = d.temperatura?.toFixed(1) + '°C';
+      document.getElementById('umiditate-aer').textContent = d.umiditate_aer?.toFixed(1) + '%';
 
-    document.getElementById('temperatura').textContent = d.temperatura?.toFixed(1) + '°C';
-    document.getElementById('umiditate-aer').textContent = d.umiditate_aer?.toFixed(1) + '%';
+      const s1 = Math.max(0, Math.min(100, d.umiditate_sol_1 || 0));
+      const s2 = Math.max(0, Math.min(100, d.umiditate_sol_2 || 0));
 
-    const s1 = Math.max(0, Math.min(100, d.umiditate_sol_1 || 0));
-    const s2 = Math.max(0, Math.min(100, d.umiditate_sol_2 || 0));
-
-    document.getElementById('sol1-val').textContent = s1.toFixed(0) + '%';
-    document.getElementById('sol2-val').textContent = s2.toFixed(0) + '%';
-    document.getElementById('sol1-bara').style.width = s1 + '%';
-    document.getElementById('sol2-bara').style.width = s2 + '%';
-    document.getElementById('sol1-bara').style.background = culoareUmiditate(s1);
-    document.getElementById('sol2-bara').style.background = culoareUmiditate(s2);
-
-    const acum = new Date().toLocaleTimeString('ro-RO');
-    document.getElementById('ultima-actualizare').textContent =
-      'Ultima actualizare: ' + acum;
-  });
-
-  // ── Istoric pentru grafic ──
-  db.ref('/istoric').limitToLast(20).on('value', snap => {
-    const data = snap.val();
-    if (!data) return;
-
-    const labels = [];
-    const sol1 = [];
-    const sol2 = [];
-
-    Object.values(data).forEach(entry => {
-      const ora = new Date(parseInt(entry.ultima_actualizare) || Date.now())
-        .toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
-      labels.push(ora);
-      sol1.push(Math.max(0, Math.min(100, entry.umiditate_sol_1 || 0)));
-      sol2.push(Math.max(0, Math.min(100, entry.umiditate_sol_2 || 0)));
+      document.getElementById('sol1-val').textContent = s1.toFixed(0) + '%';
+      document.getElementById('sol2-val').textContent = s2.toFixed(0) + '%';
+      document.getElementById('sol1-bara').style.width = s1 + '%';
+      document.getElementById('sol2-bara').style.width = s2 + '%';
+      document.getElementById('sol1-bara').style.background = culoareUmiditate(s1);
+      document.getElementById('sol2-bara').style.background = culoareUmiditate(s2);
+      document.getElementById('ultima-actualizare').textContent = 'Ultima actualizare: ' + new Date().toLocaleTimeString('ro-RO');
     });
 
-    grafic.data.labels = labels;
-    grafic.data.datasets[0].data = sol1;
-    grafic.data.datasets[1].data = sol2;
-    grafic.update();
-  });
+    db.ref('/istoric').limitToLast(20).on('value', snap => {
+      const data = snap.val();
+      if (!data) return;
+      const labels = [], sol1 = [], sol2 = [];
+      Object.values(data).forEach(entry => {
+        labels.push(new Date().toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' }));
+        sol1.push(Math.max(0, Math.min(100, entry.umiditate_sol_1 || 0)));
+        sol2.push(Math.max(0, Math.min(100, entry.umiditate_sol_2 || 0)));
+      });
+      grafic.data.labels = labels;
+      grafic.data.datasets[0].data = sol1;
+      grafic.data.datasets[1].data = sol2;
+      grafic.update();
+    });
 
-  // ── Control pompe ──
+    db.ref('/setari/prag_umiditate_min').on('value', snap => {
+      const val = snap.val();
+      if (val) {
+        document.getElementById('prag-slider').value = val;
+        document.getElementById('prag-val').textContent = val + '%';
+      }
+    });
+  }
+
   function pornestePompa(id) {
     const btn = document.getElementById('btn-pompa' + id);
     const status = document.getElementById('pompa' + id + '-status');
-
     btn.classList.add('activ');
     btn.textContent = '⏳ Se udă...';
     status.textContent = 'Activă';
-
     db.ref('/comenzi/pompa_' + id).set(true);
-
     setTimeout(() => {
       btn.classList.remove('activ');
       btn.textContent = '💧 Udă';
@@ -395,22 +432,11 @@
     }, 5000);
   }
 
-  // ── Salvare prag ──
   function salveazaPrag() {
     const prag = parseInt(document.getElementById('prag-slider').value);
     db.ref('/setari/prag_umiditate_min').set(prag);
     alert('Prag salvat: ' + prag + '%');
   }
-
-  // ── Citire prag salvat ──
-  db.ref('/setari/prag_umiditate_min').on('value', snap => {
-    const val = snap.val();
-    if (val) {
-      document.getElementById('prag-slider').value = val;
-      document.getElementById('prag-val').textContent = val + '%';
-    }
-  });
 </script>
-
 </body>
 </html>
