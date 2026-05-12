@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init("f2obJhlw5fLatGPUu");</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seră Automată</title>
@@ -308,6 +310,47 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
   const auth = firebase.auth();
+  const EMAIL_DESTINATAR = "daplaque45@gmail.com"; 
+  const PRAG_ALERTARE = 20; 
+  let ultimaAlertaTimp = {};
+  function trimiteAlertaEmail(ghiveci, umiditate, temperatura, prag) {
+  const acum = Date.now();
+  
+  // Nu trimite mai mult de o alertă la 30 minute per ghiveci
+  if (ultimaAlertaTimp[ghiveci] && acum - ultimaAlertaTimp[ghiveci] < 30 * 60 * 1000) {
+    return;
+  }
+  
+  ultimaAlertaTimp[ghiveci] = acum;
+
+  emailjs.send("service_p680v7j", "template_f07hsxb", {
+    to_email:    EMAIL_DESTINATAR,
+    ghiveci:     ghiveci,
+    umiditate:   umiditate.toFixed(1),
+    prag:        prag,
+    temperatura: temperatura.toFixed(1),
+    ora:         new Date().toLocaleString('ro-RO')
+  }).then(() => {
+    console.log('Email alertă trimis pentru ' + ghiveci);
+    afiseazaNotificare('⚠️ Alertă email trimisă pentru ' + ghiveci);
+  }).catch(err => {
+    console.error('Eroare trimitere email:', err);
+  });
+}
+
+function afiseazaNotificare(mesaj) {
+  const notif = document.createElement('div');
+  notif.style.cssText = `
+    position: fixed; top: 20px; right: 20px; z-index: 9999;
+    background: #f44336; color: white; padding: 14px 20px;
+    border-radius: 10px; font-size: 14px; font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    animation: slideIn 0.3s ease;
+  `;
+  notif.textContent = mesaj;
+  document.body.appendChild(notif);
+  setTimeout(() => notif.remove(), 5000);
+}
 
   // ── GRAFIC ──
   const ctx = document.getElementById('grafic').getContext('2d');
@@ -392,6 +435,16 @@
       document.getElementById('sol1-bara').style.background = culoareUmiditate(s1);
       document.getElementById('sol2-bara').style.background = culoareUmiditate(s2);
       document.getElementById('ultima-actualizare').textContent = 'Ultima actualizare: ' + new Date().toLocaleTimeString('ro-RO');
+      
+      const prag = parseInt(document.getElementById('prag-slider').value) || 30;
+      const temp = d.temperatura || 0;
+
+      if (s1 < PRAG_ALERTARE) {
+        trimiteAlertaEmail('Ghiveci 1', s1, temp, prag);
+      }
+      if (s2 < PRAG_ALERTARE) {
+        trimiteAlertaEmail('Ghiveci 2', s2, temp, prag);
+      }
     });
 
     db.ref('/istoric').limitToLast(20).on('value', snap => {
