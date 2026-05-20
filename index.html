@@ -429,6 +429,8 @@ function afiseazaNotificare(mesaj) {
       document.getElementById('status-text').textContent = 'Conectat';
       document.getElementById('temperatura').textContent = d.temperatura?.toFixed(1) + '°C';
       document.getElementById('umiditate-aer').textContent = d.umiditate_aer?.toFixed(1) + '%';
+      document.getElementById('lumina').textContent = 
+          d.lumina_lux ? Math.round(d.lumina_lux) + ' lx' : '--';
 
       const s1 = Math.max(0, Math.min(100, d.umiditate_sol_1 || 0));
       const s2 = Math.max(0, Math.min(100, d.umiditate_sol_2 || 0));
