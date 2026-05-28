@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init("f2obJhlw5fLatGPUu");</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seră Automată</title>
@@ -14,121 +12,48 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', sans-serif; background: #0f1a14; color: #e8f5e9; min-height: 100vh; }
 
-    /* ── LOGIN ── */
-    #login-page {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
+    #login-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
 
     .login-card {
-      background: #1a2e1e;
-      border: 0.5px solid #2d5a34;
-      border-radius: 16px;
-      padding: 40px;
-      width: 100%;
-      max-width: 380px;
+      background: #1a2e1e; border: 0.5px solid #2d5a34;
+      border-radius: 16px; padding: 40px; width: 100%; max-width: 380px;
     }
-
-    .login-logo {
-      text-align: center;
-      font-size: 40px;
-      margin-bottom: 8px;
-    }
-
-    .login-titlu {
-      text-align: center;
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .login-subtitlu {
-      text-align: center;
-      font-size: 13px;
-      color: #81c784;
-      margin-bottom: 32px;
-    }
+    .login-logo { text-align: center; font-size: 40px; margin-bottom: 8px; }
+    .login-titlu { text-align: center; font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+    .login-subtitlu { text-align: center; font-size: 13px; color: #81c784; margin-bottom: 32px; }
 
     .form-group { margin-bottom: 16px; }
-
-    .form-group label {
-      display: block;
-      font-size: 12px;
-      color: #81c784;
-      margin-bottom: 6px;
-      letter-spacing: 0.05em;
-    }
-
+    .form-group label { display: block; font-size: 12px; color: #81c784; margin-bottom: 6px; letter-spacing: 0.05em; }
     .form-group input {
-      width: 100%;
-      padding: 12px 14px;
-      background: #0f1a14;
-      border: 1px solid #2d5a34;
-      border-radius: 8px;
-      color: #e8f5e9;
-      font-size: 14px;
-      outline: none;
-      transition: border-color 0.2s;
+      width: 100%; padding: 12px 14px; background: #0f1a14;
+      border: 1px solid #2d5a34; border-radius: 8px; color: #e8f5e9;
+      font-size: 14px; outline: none; transition: border-color 0.2s;
     }
-
     .form-group input:focus { border-color: #4caf50; }
 
     .btn-login {
-      width: 100%;
-      padding: 13px;
-      background: #2e7d32;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 500;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: background 0.2s;
+      width: 100%; padding: 13px; background: #2e7d32; color: white;
+      border: none; border-radius: 8px; font-size: 15px; font-weight: 500;
+      cursor: pointer; margin-top: 8px; transition: background 0.2s;
     }
-
     .btn-login:hover { background: #388e3c; }
+    .login-eroare { color: #ef9a9a; font-size: 12px; text-align: center; margin-top: 12px; min-height: 18px; }
 
-    .login-eroare {
-      color: #ef9a9a;
-      font-size: 12px;
-      text-align: center;
-      margin-top: 12px;
-      min-height: 18px;
-    }
-
-    /* ── DASHBOARD ── */
     #dashboard-page { display: none; }
 
     header {
-      background: #1b5e20;
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background: #1b5e20; padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between;
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
     }
-
     header h1 { font-size: 18px; font-weight: 600; }
-
     .header-dreapta { display: flex; align-items: center; gap: 16px; }
-
     #status-dot { width: 10px; height: 10px; border-radius: 50%; background: #f44336; display: inline-block; margin-right: 6px; }
     #status-text { font-size: 13px; color: #a5d6a7; }
-
     #user-email { font-size: 12px; color: #a5d6a7; }
-
     .btn-logout {
-      background: transparent;
-      border: 1px solid #4caf50;
-      color: #4caf50;
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
+      background: transparent; border: 1px solid #4caf50; color: #4caf50;
+      padding: 6px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; transition: all 0.2s;
     }
     .btn-logout:hover { background: #4caf50; color: #0f1a14; }
 
@@ -141,11 +66,7 @@
 
     .carduri { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
 
-    .card {
-      background: #1a2e1e; border: 0.5px solid #2d5a34;
-      border-radius: 12px; padding: 18px;
-    }
-
+    .card { background: #1a2e1e; border: 0.5px solid #2d5a34; border-radius: 12px; padding: 18px; }
     .card-icon { font-size: 24px; margin-bottom: 8px; }
     .card-valoare { font-size: 28px; font-weight: 600; color: #a5d6a7; }
     .card-label { font-size: 12px; color: #81c784; margin-top: 4px; }
@@ -154,13 +75,11 @@
     .bara-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
 
     .pompe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-
     .pompa-card {
       background: #1a2e1e; border: 0.5px solid #2d5a34;
       border-radius: 12px; padding: 18px;
       display: flex; align-items: center; justify-content: space-between;
     }
-
     .pompa-info h3 { font-size: 15px; font-weight: 500; }
     .pompa-info p { font-size: 12px; color: #81c784; margin-top: 2px; }
 
@@ -172,10 +91,7 @@
     .btn-pompa:hover { background: #388e3c; }
     .btn-pompa.activ { background: #f44336; }
 
-    .grafic-card {
-      background: #1a2e1e; border: 0.5px solid #2d5a34;
-      border-radius: 12px; padding: 20px; margin-top: 14px;
-    }
+    .grafic-card { background: #1a2e1e; border: 0.5px solid #2d5a34; border-radius: 12px; padding: 20px; margin-top: 14px; }
     .grafic-card h3 { font-size: 14px; color: #81c784; margin-bottom: 16px; }
 
     .setari-card {
@@ -192,13 +108,12 @@
 </head>
 <body>
 
-<!-- ── PAGINA LOGIN ── -->
+<!-- ── LOGIN ── -->
 <div id="login-page">
   <div class="login-card">
     <div class="login-logo">🌿</div>
     <div class="login-titlu">Seră Automată</div>
     <div class="login-subtitlu">Autentifică-te pentru a continua</div>
-
     <div class="form-group">
       <label>EMAIL</label>
       <input type="email" id="input-email" placeholder="email@exemplu.com">
@@ -208,7 +123,6 @@
       <input type="password" id="input-parola" placeholder="••••••••"
         onkeydown="if(event.key==='Enter') login()">
     </div>
-
     <button class="btn-login" onclick="login()">Intră în sistem</button>
     <div class="login-eroare" id="login-eroare"></div>
   </div>
@@ -229,6 +143,7 @@
   </header>
 
   <div class="container">
+
     <div class="sectiune-titlu">Senzori ambient</div>
     <div class="carduri">
       <div class="card">
@@ -241,7 +156,7 @@
         <div class="card-valoare" id="umiditate-aer">--</div>
         <div class="card-label">Umiditate aer (%)</div>
       </div>
-        <div class="card">
+      <div class="card">
         <div class="card-icon">☀️</div>
         <div class="card-valoare" id="lumina">--</div>
         <div class="card-label">Lumină (lux)</div>
@@ -315,47 +230,6 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
   const auth = firebase.auth();
-  const EMAIL_DESTINATAR = "daplaque45@gmail.com"; 
-  const PRAG_ALERTARE = 20; 
-  let ultimaAlertaTimp = {};
-  function trimiteAlertaEmail(ghiveci, umiditate, temperatura, prag) {
-  const acum = Date.now();
-  
-  // Nu trimite mai mult de o alertă la 30 minute per ghiveci
-  if (ultimaAlertaTimp[ghiveci] && acum - ultimaAlertaTimp[ghiveci] < 30 * 60 * 1000) {
-    return;
-  }
-  
-  ultimaAlertaTimp[ghiveci] = acum;
-
-  emailjs.send("service_p680v7j", "template_f07hsxb", {
-    to_email:    EMAIL_DESTINATAR,
-    ghiveci:     ghiveci,
-    umiditate:   umiditate.toFixed(1),
-    prag:        prag,
-    temperatura: temperatura.toFixed(1),
-    ora:         new Date().toLocaleString('ro-RO')
-  }).then(() => {
-    console.log('Email alertă trimis pentru ' + ghiveci);
-    afiseazaNotificare('⚠️ Alertă email trimisă pentru ' + ghiveci);
-  }).catch(err => {
-    console.error('Eroare trimitere email:', err);
-  });
-}
-
-function afiseazaNotificare(mesaj) {
-  const notif = document.createElement('div');
-  notif.style.cssText = `
-    position: fixed; top: 20px; right: 20px; z-index: 9999;
-    background: #f44336; color: white; padding: 14px 20px;
-    border-radius: 10px; font-size: 14px; font-weight: 500;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    animation: slideIn 0.3s ease;
-  `;
-  notif.textContent = mesaj;
-  document.body.appendChild(notif);
-  setTimeout(() => notif.remove(), 5000);
-}
 
   // ── GRAFIC ──
   const ctx = document.getElementById('grafic').getContext('2d');
@@ -396,7 +270,6 @@ function afiseazaNotificare(mesaj) {
     const parola = document.getElementById('input-parola').value;
     const eroare = document.getElementById('login-eroare');
     eroare.textContent = '';
-
     auth.signInWithEmailAndPassword(email, parola)
       .catch(err => {
         if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
@@ -409,11 +282,8 @@ function afiseazaNotificare(mesaj) {
       });
   }
 
-  function logout() {
-    auth.signOut();
-  }
+  function logout() { auth.signOut(); }
 
-  // ── DASHBOARD ──
   function culoareUmiditate(val) {
     if (val < 20) return '#f44336';
     if (val < 40) return '#ff9800';
@@ -429,8 +299,7 @@ function afiseazaNotificare(mesaj) {
       document.getElementById('status-text').textContent = 'Conectat';
       document.getElementById('temperatura').textContent = d.temperatura?.toFixed(1) + '°C';
       document.getElementById('umiditate-aer').textContent = d.umiditate_aer?.toFixed(1) + '%';
-      document.getElementById('lumina').textContent = 
-          d.lumina_lux ? Math.round(d.lumina_lux) + ' lx' : '--';
+      document.getElementById('lumina').textContent = d.lumina_lux ? Math.round(d.lumina_lux) + ' lx' : '--';
 
       const s1 = Math.max(0, Math.min(100, d.umiditate_sol_1 || 0));
       const s2 = Math.max(0, Math.min(100, d.umiditate_sol_2 || 0));
@@ -441,25 +310,18 @@ function afiseazaNotificare(mesaj) {
       document.getElementById('sol2-bara').style.width = s2 + '%';
       document.getElementById('sol1-bara').style.background = culoareUmiditate(s1);
       document.getElementById('sol2-bara').style.background = culoareUmiditate(s2);
-      document.getElementById('ultima-actualizare').textContent = 'Ultima actualizare: ' + new Date().toLocaleTimeString('ro-RO');
-      
-      const prag = parseInt(document.getElementById('prag-slider').value) || 30;
-      const temp = d.temperatura || 0;
-
-      if (s1 < PRAG_ALERTARE) {
-        trimiteAlertaEmail('Ghiveci 1', s1, temp, prag);
-      }
-      if (s2 < PRAG_ALERTARE) {
-        trimiteAlertaEmail('Ghiveci 2', s2, temp, prag);
-      }
+      document.getElementById('ultima-actualizare').textContent =
+        'Ultima actualizare: ' + new Date().toLocaleTimeString('ro-RO');
     });
 
     db.ref('/istoric').limitToLast(20).on('value', snap => {
       const data = snap.val();
       if (!data) return;
       const labels = [], sol1 = [], sol2 = [];
-      Object.values(data).forEach(entry => {
+      Object.values(data).forEach(() => {
         labels.push(new Date().toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' }));
+      });
+      Object.values(data).forEach(entry => {
         sol1.push(Math.max(0, Math.min(100, entry.umiditate_sol_1 || 0)));
         sol2.push(Math.max(0, Math.min(100, entry.umiditate_sol_2 || 0)));
       });
