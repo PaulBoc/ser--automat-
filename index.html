@@ -64,7 +64,7 @@
       color: #66bb6a; margin-bottom: 10px; margin-top: 28px; text-transform: uppercase;
     }
 
-    .carduri { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+    .carduri { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
 
     .card { background: #1a2e1e; border: 0.5px solid #2d5a34; border-radius: 12px; padding: 18px; }
     .card-icon { font-size: 24px; margin-bottom: 8px; }
@@ -74,22 +74,24 @@
     .bara { height: 8px; background: #2d5a34; border-radius: 4px; overflow: hidden; margin-top: 6px; }
     .bara-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
 
-    .pompe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-    .pompa-card {
+    .actuatoare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+
+    .actuator-card {
       background: #1a2e1e; border: 0.5px solid #2d5a34;
       border-radius: 12px; padding: 18px;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .pompa-info h3 { font-size: 15px; font-weight: 500; }
-    .pompa-info p { font-size: 12px; color: #81c784; margin-top: 2px; }
+    .actuator-info h3 { font-size: 15px; font-weight: 500; }
+    .actuator-info p { font-size: 12px; color: #81c784; margin-top: 2px; }
 
-    .btn-pompa {
+    .btn-actiune {
       background: #2e7d32; color: white; border: none;
       border-radius: 8px; padding: 10px 18px; font-size: 13px;
       cursor: pointer; transition: background 0.2s;
     }
-    .btn-pompa:hover { background: #388e3c; }
-    .btn-pompa.activ { background: #f44336; }
+    .btn-actiune:hover { background: #388e3c; }
+    .btn-actiune.activ { background: #f44336; }
+    .btn-actiune.vent-activ { background: #1565c0; }
 
     .grafic-card { background: #1a2e1e; border: 0.5px solid #2d5a34; border-radius: 12px; padding: 20px; margin-top: 14px; }
     .grafic-card h3 { font-size: 14px; color: #81c784; margin-bottom: 16px; }
@@ -102,6 +104,14 @@
     .setari-card label { font-size: 13px; color: #81c784; }
     .setari-card input[type=range] { width: 160px; accent-color: #4caf50; }
     .setari-card span { font-size: 14px; font-weight: 500; color: #a5d6a7; min-width: 40px; }
+
+    .status-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      font-size: 11px; font-weight: 500;
+    }
+    .badge-activ { background: #1b5e20; color: #a5d6a7; }
+    .badge-oprit { background: #2d5a34; color: #81c784; }
+    .badge-vent  { background: #0d47a1; color: #90caf9; }
 
     .ultima-actualizare { font-size: 11px; color: #4caf50; text-align: right; margin-top: 20px; }
   </style>
@@ -144,6 +154,7 @@
 
   <div class="container">
 
+    <!-- SENZORI AMBIENT -->
     <div class="sectiune-titlu">Senzori ambient</div>
     <div class="carduri">
       <div class="card">
@@ -163,49 +174,64 @@
       </div>
     </div>
 
-    <div class="sectiune-titlu">Umiditate sol per ghiveci</div>
+    <!-- UMIDITATE SOL -->
+    <div class="sectiune-titlu">Umiditate sol per plantă</div>
     <div class="carduri">
       <div class="card">
-        <div class="card-icon">🪴</div>
+        <div class="card-icon">🌱</div>
         <div class="card-valoare" id="sol1-val">--</div>
-        <div class="card-label">planta 1 (%)</div>
+        <div class="card-label">Planta 1 (%)</div>
         <div class="bara"><div class="bara-fill" id="sol1-bara" style="width:0%;background:#4caf50"></div></div>
       </div>
       <div class="card">
-        <div class="card-icon">🪴</div>
+        <div class="card-icon">🌱</div>
         <div class="card-valoare" id="sol2-val">--</div>
-        <div class="card-label">planta 2 (%)</div>
+        <div class="card-label">Planta 2 (%)</div>
         <div class="bara"><div class="bara-fill" id="sol2-bara" style="width:0%;background:#4caf50"></div></div>
       </div>
     </div>
 
-    <div class="sectiune-titlu">Control pompe</div>
-    <div class="pompe-grid">
-      <div class="pompa-card">
-        <div class="pompa-info">
-          <h3>Pompa 1</h3>
+    <!-- CONTROL ACTUATOARE -->
+    <div class="sectiune-titlu">Control actuatoare</div>
+    <div class="actuatoare-grid">
+
+      <div class="actuator-card">
+        <div class="actuator-info">
+          <h3>💧 Pompa 1</h3>
           <p id="pompa1-status">Inactivă</p>
         </div>
-        <button class="btn-pompa" id="btn-pompa1" onclick="pornestePompa(1)">💧 Udă</button>
+        <button class="btn-actiune" id="btn-pompa1" onclick="pornestePompa(1)">Udă Planta 1</button>
       </div>
-      <div class="pompa-card">
-        <div class="pompa-info">
-          <h3>Pompa 2</h3>
+
+      <div class="actuator-card">
+        <div class="actuator-info">
+          <h3>💧 Pompa 2</h3>
           <p id="pompa2-status">Inactivă</p>
         </div>
-        <button class="btn-pompa" id="btn-pompa2" onclick="pornestePompa(2)">💧 Udă</button>
+        <button class="btn-actiune" id="btn-pompa2" onclick="pornestePompa(2)">Udă Planta 2</button>
       </div>
+
+      <div class="actuator-card">
+        <div class="actuator-info">
+          <h3>🌀 Ventilator</h3>
+          <p id="vent-status">Inactiv</p>
+        </div>
+        <button class="btn-actiune" id="btn-vent" onclick="comutaVentilator()">Pornește</button>
+      </div>
+
     </div>
 
+    <!-- SETARI -->
     <div class="sectiune-titlu">Setări prag udare</div>
     <div class="setari-card">
       <label>Prag minim umiditate sol:</label>
       <input type="range" id="prag-slider" min="10" max="60" value="30"
         oninput="document.getElementById('prag-val').textContent=this.value+'%'">
       <span id="prag-val">30%</span>
-      <button class="btn-pompa" onclick="salveazaPrag()">Salvează</button>
+      <button class="btn-actiune" onclick="salveazaPrag()">Salvează</button>
     </div>
 
+    <!-- GRAFICE -->
     <div class="sectiune-titlu">Istoric umiditate sol</div>
     <div class="grafic-card">
       <h3>Ultimele 20 de citiri</h3>
@@ -231,6 +257,8 @@
   const db = firebase.database();
   const auth = firebase.auth();
 
+  let ventilatorActiv = false;
+
   // ── GRAFIC ──
   const ctx = document.getElementById('grafic').getContext('2d');
   const grafic = new Chart(ctx, {
@@ -238,8 +266,8 @@
     data: {
       labels: [],
       datasets: [
-        { label: 'Ghiveci 1 (%)', data: [], borderColor: '#4caf50', backgroundColor: 'rgba(76,175,80,0.1)', tension: 0.4, fill: true },
-        { label: 'Ghiveci 2 (%)', data: [], borderColor: '#81c784', backgroundColor: 'rgba(129,199,132,0.1)', tension: 0.4, fill: true }
+        { label: 'Planta 1 (%)', data: [], borderColor: '#4caf50', backgroundColor: 'rgba(76,175,80,0.1)', tension: 0.4, fill: true },
+        { label: 'Planta 2 (%)', data: [], borderColor: '#81c784', backgroundColor: 'rgba(129,199,132,0.1)', tension: 0.4, fill: true }
       ]
     },
     options: {
@@ -291,6 +319,7 @@
   }
 
   function initDashboard() {
+    // Date live
     db.ref('/live').on('value', snap => {
       const d = snap.val();
       if (!d) return;
@@ -310,18 +339,22 @@
       document.getElementById('sol2-bara').style.width = s2 + '%';
       document.getElementById('sol1-bara').style.background = culoareUmiditate(s1);
       document.getElementById('sol2-bara').style.background = culoareUmiditate(s2);
+
+      // Status ventilator din Firebase
+      ventilatorActiv = d.ventilator || false;
+      actualizeazaBtnVent();
+
       document.getElementById('ultima-actualizare').textContent =
         'Ultima actualizare: ' + new Date().toLocaleTimeString('ro-RO');
     });
 
+    // Istoric grafic
     db.ref('/istoric').limitToLast(20).on('value', snap => {
       const data = snap.val();
       if (!data) return;
       const labels = [], sol1 = [], sol2 = [];
-      Object.values(data).forEach(() => {
-        labels.push(new Date().toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' }));
-      });
       Object.values(data).forEach(entry => {
+        labels.push(new Date().toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' }));
         sol1.push(Math.max(0, Math.min(100, entry.umiditate_sol_1 || 0)));
         sol2.push(Math.max(0, Math.min(100, entry.umiditate_sol_2 || 0)));
       });
@@ -331,6 +364,7 @@
       grafic.update();
     });
 
+    // Setari prag
     db.ref('/setari/prag_umiditate_min').on('value', snap => {
       const val = snap.val();
       if (val) {
@@ -340,6 +374,7 @@
     });
   }
 
+  // ── POMPE ──
   function pornestePompa(id) {
     const btn = document.getElementById('btn-pompa' + id);
     const status = document.getElementById('pompa' + id + '-status');
@@ -349,11 +384,34 @@
     db.ref('/comenzi/pompa_' + id).set(true);
     setTimeout(() => {
       btn.classList.remove('activ');
-      btn.textContent = '💧 Udă';
+      btn.textContent = id === 1 ? 'Udă Planta 1' : 'Udă Planta 2';
       status.textContent = 'Inactivă';
     }, 5000);
   }
 
+  // ── VENTILATOR ──
+  function comutaVentilator() {
+    db.ref('/comenzi/ventilator').set(true);
+    ventilatorActiv = !ventilatorActiv;
+    actualizeazaBtnVent();
+  }
+
+  function actualizeazaBtnVent() {
+    const btn = document.getElementById('btn-vent');
+    const status = document.getElementById('vent-status');
+    if (ventilatorActiv) {
+      btn.textContent = 'Oprește';
+      btn.classList.add('vent-activ');
+      btn.classList.remove('activ');
+      status.textContent = 'Activ 🌀';
+    } else {
+      btn.textContent = 'Pornește';
+      btn.classList.remove('vent-activ');
+      status.textContent = 'Inactiv';
+    }
+  }
+
+  // ── SETARI ──
   function salveazaPrag() {
     const prag = parseInt(document.getElementById('prag-slider').value);
     db.ref('/setari/prag_umiditate_min').set(prag);
