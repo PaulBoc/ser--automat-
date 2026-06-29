@@ -390,11 +390,13 @@
   }
 
   // ── VENTILATOR ──
-  function comutaVentilator() {
-    db.ref('/comenzi/ventilator').set(true);
-    ventilatorActiv = !ventilatorActiv;
-    actualizeazaBtnVent();
-  }
+ function comutaVentilator() {
+  ventilatorActiv = !ventilatorActiv;
+  // Trimite starea exacta in loc de true
+  db.ref('/comenzi/ventilator_stare').set(ventilatorActiv);
+  db.ref('/comenzi/ventilator').set(true); // semnal de trigger
+  actualizeazaBtnVent();
+}
 
   function actualizeazaBtnVent() {
     const btn = document.getElementById('btn-vent');
